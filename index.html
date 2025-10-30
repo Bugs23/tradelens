@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Dodgy Dave's Stock Predictions</title>
+  <link rel="stylesheet" href="index.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+    rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <header>
+    <h1>Trade<span>Lens</span></h1>
+  </header>
+  <main>
+    <section class="action-panel">
+      <form id="ticker-input-form">
+        <label for="ticker-input" class="text-base"> Add up to 3 stock tickers below to get a super accurate stock
+          predictions
+          report
+        </label>
+        <div class="form-input-control">
+          <input type="text" id="ticker-input" placeholder="MSFT">
+          <button class="add-ticker-btn">
+            <img src="add.svg" class="add-ticker-svg" alt="add">
+          </button>
+        </div>
+      </form>
+      <p class="ticker-choice-display text-base">
+        Your tickers will appear here...
+      </p>
+      <button class="generate-report-btn" type="button" disabled>
+        Generate Report
+      </button>
+    </section>
+    <section class="loading-panel">
+      <img src="loader.svg" alt="loading">
+      <div id="api-message">Querying Stocks API...</div>
+    </section>
+    <section class="output-panel">
+      <h2>Your Report 😜</h2>
+    </section>
+  </main>
+  <footer>
+    &copy; <span id="year"></span> TradeLens
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </footer>
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
