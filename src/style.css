@@ -173,17 +173,15 @@ header h1 > span {
   font-weight: 200;
 }
 
-/* Main */
 main {
   display: flex;
   justify-content: center;
-  align-items: center; /* centers inner content horizontally */
+  align-items: center;
   flex-direction: column;
   width: 100%;
   margin: 20px 0;
 }
 
-/* Panels */
 .action-panel,
 .output-panel {
   line-height: 1.4em;
@@ -199,6 +197,7 @@ main {
   display: none;
   justify-content: flex-start;
   border: 2px solid;
+  border-radius: 20px;
   padding: 1em 2em;
 }
 
@@ -215,11 +214,9 @@ main {
   overflow-y: scroll;
 }
 
-/* Text */
 h2 {
   text-align: center;
   font-weight: 400;
-  background-color: #f6f6f6;
   padding: 0 10px;
   font-size: 18px;
 }
@@ -233,10 +230,9 @@ p.tag-line {
 .ticker-choice-display {
   display: flex;
   align-items: center;
-  justify-content: center; /* center tickers horizontally */
+  justify-content: center;
 }
 
-/* Controls */
 form {
   width: 360px;
   display: flex;
@@ -254,26 +250,24 @@ label {
 .form-input-control {
   display: flex;
   justify-content: center;
-  align-items: stretch; /* ensure both elements share the same height */
+  align-items: stretch;
   width: 100%;
   max-width: 400px;
 }
 
-/* Input: rounded left side only */
 input[type="text"] {
-  flex: 1; /* fills available space */
+  flex: 1;
   padding: 1em 1.2em;
   border: none;
-  border-right: none; /* removes double border */
+  border-right: none;
   border-top-left-radius: 50px;
   border-bottom-left-radius: 50px;
   outline: none;
   font-size: 1em;
-  height: 100%; /* keep consistent with button */
+  height: 100%;
   box-sizing: border-box;
 }
 
-/* Button: rounded right side only */
 .add-ticker-btn {
   display: flex;
   align-items: center;
@@ -285,11 +279,10 @@ input[type="text"] {
   border-top-right-radius: 50px;
   border-bottom-right-radius: 50px;
   font-size: 1.5em;
-  height: auto; /* flex makes it match input automatically */
+  height: auto;
   box-sizing: border-box;
 }
 
-/* Optional hover */
 .add-ticker-btn:hover {
   background-color: #f0f0f0;
 }
@@ -311,8 +304,6 @@ input[type="text"] {
   border-radius: 50px;
 }
 
-/* Ticker display */
-
 .ticker:after {
   content: ",";
 }
@@ -321,13 +312,11 @@ input[type="text"] {
   content: "";
 }
 
-/* Footer */
 footer {
   font-size: 14px;
   text-align: center;
 }
 
-/* Hide scrollbars on some browsers */
 .output-panel p::-webkit-scrollbar {
   display: none;
 }

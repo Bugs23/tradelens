@@ -1,10 +1,12 @@
 import "./style.css";
 import { dates } from "./utils/dates";
 
+// Import google genai sdk
+import { GoogleGenAI } from "@google/genai";
+
 const POLYGON_API_KEY = import.meta.env.VITE_POLYGON_API_KEY;
-console.log(POLYGON_API_KEY); // check browser console (not terminal)
-const VITE_OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
-console.log(VITE_OPENAI_API_KEY); // check browser console (not terminal)
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+
 const tickersArr = [];
 
 const generateReportBtn = document.querySelector(".generate-report-btn");
@@ -43,32 +45,64 @@ const loadingArea = document.querySelector(".loading-panel");
 const apiMessage = document.getElementById("api-message");
 
 async function fetchStockData() {
+  if (tickersArr.length === 0) {
+    loadingArea.innerText = "Add at least one ticker.";
+    return;
+  }
+
   document.querySelector(".action-panel").style.display = "none";
   loadingArea.style.display = "flex";
+
   try {
     const stockData = await Promise.all(
       tickersArr.map(async (ticker) => {
-        const url = `https://api.polygon.io/v2/aggs/ticker/${ticker}/range/1/day/${dates.startDate}/${dates.endDate}?apiKey=${process.env.POLYGON_API_KEY}`;
-        const response = await fetch(url);
-        const data = await response.text();
-        const status = await response.status;
-        if (status === 200) {
-          apiMessage.innerText = "Creating report...";
-          return data;
-        } else {
-          loadingArea.innerText = "There was an error fetching stock data.";
+        const url = `https://api.polygon.io/v2/aggs/ticker/${ticker}/range/1/day/${dates.startDate}/${dates.endDate}?apiKey=${POLYGON_API_KEY}`;
+
+        const res = await fetch(url);
+        if (!res.ok) {
+          const errText = await res.text();
+          throw new Error(`Polygon ${res.status}: ${errText}`);
         }
+
+        const data = await res.json();
+        return { ticker, data };
       })
     );
-    fetchReport(stockData.join(""));
+
+    apiMessage.innerText = "Creating report...";
+    fetchReport(stockData);
   } catch (err) {
     loadingArea.innerText = "There was an error fetching stock data.";
-    console.error("error: ", err);
+    console.error("fetchStockData error:", err);
   }
 }
 
-async function fetchReport(data) {
-  /** AI goes here **/
+async function fetchReport(stockData) {
+  try {
+    if (!GEMINI_API_KEY) {
+      loadingArea.innerText =
+        "Unable to access AI. Please refresh and try again.";
+      console.error("Error: ", err);
+      return;
+    }
+
+    const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+    const response = await ai.models.generateContent({
+      model: "gemini-2.0-flash-001",
+      contents: `You are a trading guru. Given data on share prices over the past 3 days, write a report of no more than 150 words describing the stocks performance and recommend whether to buy, hold or sell ${JSON.stringify(
+        stockData,
+        null,
+        2
+      )}.`,
+      // config: {
+      //   maxOutputTokens: 400,
+      //   temperature: 0.2,
+      // },
+    });
+
+    const output = response.text;
+    renderReport(output);
+  } catch (err) {}
 }
 
 function renderReport(output) {
