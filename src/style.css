@@ -146,6 +146,10 @@ body {
 PRIMARY STYLES 
 *******************************************/
 
+html {
+  background-color: #2e435e;
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -158,6 +162,10 @@ body {
 .text-base {
   font-weight: 200;
   font-size: 16px;
+}
+
+.bold {
+  font-weight: 600;
 }
 
 header {
@@ -180,6 +188,8 @@ main {
   flex-direction: column;
   width: 100%;
   margin: 20px 0;
+  padding-right: 20px;
+  padding-left: 20px;
 }
 
 .action-panel,
@@ -212,6 +222,11 @@ main {
 
 .output-panel p {
   overflow-y: scroll;
+  margin: 15px 0;
+}
+
+.output-panel hr {
+  border: 1px solid rgba(242, 242, 242, 0.25);
 }
 
 h2 {

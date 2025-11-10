@@ -78,6 +78,16 @@ async function fetchStockData() {
 }
 
 async function fetchReport(stockData) {
+  const promptMessage = `
+        You are a trading guru. Given data on share prices over the past 3 days, write a report of no more than 150 words describing the stocks performance and recommend whether to buy, hold or sell the provided stockData.
+         
+        Format exactly like and put an <hr> after each stock report except the last one:
+
+        <p><strong class="bold">Stock:</strong>...</p> <p><strong class="bold">Summary:</strong> ...</p> <p><strong class="bold">Recommendation:</strong> ...</p>
+
+        stockData: ${JSON.stringify(stockData, null, 2)}
+      `;
+
   try {
     if (!GEMINI_API_KEY) {
       loadingArea.innerText =
@@ -89,27 +99,23 @@ async function fetchReport(stockData) {
     const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
     const response = await ai.models.generateContent({
       model: "gemini-2.0-flash-001",
-      contents: `You are a trading guru. Given data on share prices over the past 3 days, write a report of no more than 150 words describing the stocks performance and recommend whether to buy, hold or sell ${JSON.stringify(
-        stockData,
-        null,
-        2
-      )}.`,
-      // config: {
-      //   maxOutputTokens: 400,
-      //   temperature: 0.2,
-      // },
+      contents: promptMessage,
+      generationConfig: {
+        maxOutputTokens: 400,
+        temperature: 0.2,
+        frequencyPenalty: 0.5,
+        presencePenalty: 0.0,
+      },
     });
 
-    const output = response.text;
-    renderReport(output);
+    const htmlOutput = response.text;
+    renderReport(htmlOutput);
   } catch (err) {}
 }
 
-function renderReport(output) {
+function renderReport(htmlOutput) {
   loadingArea.style.display = "none";
   const outputArea = document.querySelector(".output-panel");
-  const report = document.createElement("p");
-  outputArea.appendChild(report);
-  report.textContent = output;
-  outputArea.style.display = "flex";
+  outputArea.innerHTML = htmlOutput;
+  outputArea.style.display = "block";
 }
